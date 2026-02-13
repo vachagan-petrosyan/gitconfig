@@ -1,0 +1,30 @@
+[user]
+    email = <email>
+    name = <name surname>
+[alias]
+    # Remove all ignoring files as well
+    rmrfign = clean -fdX
+    # Show status compact version
+    st = status -s
+    # Show status compact version include ignoring files
+    stign = status -s --ignored
+    # Unstage staged file
+    unstage = restore --staged
+    # Revert a specific modified file: git undo <file>
+    revert = restore
+    lg = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(auto)%d%C(reset) %s %C(green)(%cr) %C(bold blue)<%an>%C(reset)' --abbrev-commit --all
+    hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+    # Show last 20 commits
+    ll = log --oneline --decorate --graph --all -30
+    # Show commiter names and count
+    who = shortlog -sn --no-merges
+    # Difftool
+    dt = difftool -y
+[diff]
+    tool = nvimdiff
+[merge]
+    tool = nvimdiff
+[mergetool]
+    prompt = false
+[difftool "nvimdiff"]
+    cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
