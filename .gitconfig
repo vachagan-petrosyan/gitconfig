@@ -12,7 +12,7 @@
     unstage = restore --staged
     # Revert a specific modified file: git undo <file>
     revert = restore
-    lg = log --graph --pretty=format:'%C(yellow)%h%C(reset) -%C(auto)%d%C(reset) %s %C(green)(%cr) %C(bold blue)<%an>%C(reset)' --abbrev-commit --all
+    lg = log --graph --pretty=format:'%C(yellow)%<(9)%h%C(reset) - %C(bold blue)%<(18,trunc)%an%C(reset) %C(green)%<(14)%cr%C(reset) - %s' --abbrev-commit --all
     hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
     # Show last 20 commits
     ll = log --oneline --decorate --graph --all -30
@@ -20,6 +20,8 @@
     who = shortlog -sn --no-merges
     # Difftool
     dt = difftool -y
+    # Show edited file list in the specific commit
+    ls = diff-tree --no-commit-id -r --name-status
 [diff]
     tool = nvimdiff
 [merge]
