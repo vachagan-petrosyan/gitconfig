@@ -3,7 +3,7 @@
     name = <name surname>
 [alias]
     # Remove all ignoring files as well
-    rmrfign = clean -fdX
+    rmign = clean -fdX
     # Show status compact version
     st = status -s
     # Show status compact version include ignoring files
