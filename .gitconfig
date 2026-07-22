@@ -1,32 +1,72 @@
 [user]
+    # Authorship stamped into every commit you make
     email = <email>
     name = <name surname>
+
 [alias]
-    # Remove all ignoring files as well
-    rmign = clean -fdX
-    # Show status compact version
+    # Delete untracked files and directories, ignored ones only (-X)
+    rmrfign = clean -fdX
+
+    # Short-format status (two-column XY porcelain codes)
     st = status -s
-    # Show status compact version include ignoring files
+
+    # Same, plus ignored paths listed under "!!"
     stign = status -s --ignored
-    # Unstage staged file
+
+    # Move a file out of the index, keep working-tree changes: git unstage <file>
     unstage = restore --staged
-    # Revert a specific modified file: git undo <file>
-    revert = restore
+
+    # Discard working-tree changes for a file: git undo <file>
+    # (was "revert", which git ignores because `git revert` is a builtin)
+    undo = restore
+
+    # Pretty graph of all refs: hash, author, relative date, subject
     lg = log --graph --pretty=format:'%C(yellow)%<(9)%h%C(reset) - %C(bold blue)%<(18,trunc)%an%C(reset) %C(green)%<(14)%cr%C(reset) - %s' --abbrev-commit --all
+
+    # Same idea, current branch only, absolute short dates
     hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
-    # Show last 20 commits
-    ll = log --oneline --decorate --graph --all -30
-    # Show commiter names and count
+
+    # Last 20 commits across all refs, one line each
+    ll = log --oneline --decorate --graph --all -20
+
+    # Contributor leaderboard by commit count, merges excluded
     who = shortlog -sn --no-merges
-    # Difftool
+
+    # Open the configured difftool without the per-file "launch?" prompt
     dt = difftool -y
-    # Show edited file list in the specific commit
+
+    # List files changed by a commit with A/M/D status, no diff body
     ls = diff-tree --no-commit-id -r --name-status
+
+    # Local branches with upstream + ahead/behind counts
+    br = branch -vv
+
+    # Same, including remote-tracking branches
+    bra = branch -a -vv
+
+    # Fast-forward every tracking branch from origin without checking them out.
+    # lstrip=2 turns "origin/main" into "main" so the refspec is valid.
+    # The checked-out branch is skipped: git refuses to fetch into it.
+    sync = "!git fetch origin && git branch --format \"%(refname:short) %(upstream:lstrip=2)\" | while read -r local upstream; do [ -n \"$upstream\" ] && git fetch origin \"$upstream:$local\" 2>/dev/null; done; true"
+
 [diff]
+    # External tool launched by `git difftool`
     tool = nvimdiff
-[merge]
-    tool = nvimdiff
-[mergetool]
+
+[difftool]
+    # Don't ask before launching the tool for each file (matches the `dt` alias)
     prompt = false
+
 [difftool "nvimdiff"]
+    # Plain 2-way vertical split instead of git's builtin nvimdiff recipe
     cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
+
+[merge]
+    # External tool launched by `git mergetool` on conflicts
+    tool = nvimdiff
+
+[mergetool]
+    # Don't ask "hit return to launch nvimdiff" for each conflicted file
+    prompt = false
+    # Don't leave *.orig files behind after a resolved conflict
+    keepBackup = false
