@@ -49,6 +49,10 @@
     # The checked-out branch is skipped: git refuses to fetch into it.
     sync = "!git fetch origin && git branch --format \"%(refname:short) %(upstream:lstrip=2)\" | while read -r local upstream; do [ -n \"$upstream\" ] && git fetch origin \"$upstream:$local\" 2>/dev/null; done; true"
 
+    # Open the difftool on a single commit vs its parent: git dtc <hash> [-- <path>]
+    # Defaults to HEAD; falls back to the empty tree for the root commit.
+    dth = "!f() { rev=${1:-HEAD}; [ $# -gt 0 ] && shift; if git rev-parse -q --verify \"$rev^\" >/dev/null 2>&1; then git difftool -y \"$rev^\" \"$rev\" \"$@\"; else git difftool -y \"$(git hash-object -t tree /dev/null)\" \"$rev\" \"$@\"; fi; }; f"
+
 [diff]
     # External tool launched by `git difftool`
     tool = nvimdiff
