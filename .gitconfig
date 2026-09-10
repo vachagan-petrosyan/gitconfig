@@ -52,6 +52,15 @@
     # Open the difftool on a single commit vs its parent: git dtc <hash> [-- <path>]
     # Defaults to HEAD; falls back to the empty tree for the root commit.
     dth = "!f() { rev=${1:-HEAD}; [ $# -gt 0 ] && shift; if git rev-parse -q --verify \"$rev^\" >/dev/null 2>&1; then git difftool -y \"$rev^\" \"$rev\" \"$@\"; else git difftool -y \"$(git hash-object -t tree /dev/null)\" \"$rev\" \"$@\"; fi; }; f"
+    
+    # Commit history for one file, renames followed: git fh <file>
+    fh = log --follow --pretty=format:'%C(yellow)%<(9)%h%C(reset) - %C(bold blue)%<(18,trunc)%an%C(reset) %C(green)%<(14)%cr%C(reset) - %s' --abbrev-commit --
+
+    # Same list plus the diff introduced by each commit: git fhp <file>
+    fhp = log --follow -p --
+
+    # Same list plus insertion/deletion counts per commit: git fhs <file>
+    fhs = log --follow --stat --oneline --
 
 [diff]
     # External tool launched by `git difftool`
@@ -74,3 +83,9 @@
     prompt = false
     # Don't leave *.orig files behind after a resolved conflict
     keepBackup = false
+
+[color]
+    ui = auto
+
+[core]
+    editor = nvim
