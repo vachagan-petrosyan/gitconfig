@@ -8,7 +8,7 @@
     rmrfign = clean -fdX
 
     # Short-format status (two-column XY porcelain codes)
-    st = status -s
+    st = status --short --branch
 
     # Same, plus ignored paths listed under "!!"
     stign = status -s --ignored
